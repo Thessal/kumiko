@@ -94,13 +94,20 @@ class Kumiko:
 		
 		# White background: values below 220 will be black, the rest white
 		if bgcol == 'white':
-			ret,thresh = cv.threshold(gray,220,255,cv.THRESH_BINARY_INV)
+			#ret,thresh = cv.threshold(gray,220,255,cv.THRESH_BINARY_INV)
+			#contours, hierarchy = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)[-2:]
+			thresh = cv.adaptiveThreshold(gray,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,cv.THRESH_BINARY_INV,101,2)
+			thresh = cv.dilate(thresh, kernel, iterations=2)
 			contours, hierarchy = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)[-2:]
 		
 		elif bgcol == 'black':
 			# Black background: values above 25 will be black, the rest white
-			ret,thresh = cv.threshold(gray,25,255,cv.THRESH_BINARY)
+			#ret,thresh = cv.threshold(gray,25,255,cv.THRESH_BINARY)
+			#contours, hierarchy = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)[-2:]
+			thresh = cv.adaptiveThreshold(gray,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,cv.THRESH_BINARY,101,2)
+			thresh = cv.dilate(thresh, kernel, iterations=2)
 			contours, hierarchy = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)[-2:]
+
 		
 		else:
 			raise Exception('Fatal error, unknown background color: '+str(bgcol)) 
